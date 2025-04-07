@@ -1,0 +1,28 @@
+CC = gcc
+CFLAGS = -Wall -Wextra -g
+
+SRC = linkedlist.c linkedlist_circular.c
+TESTS = test_linkedlist.c test_linkedlist_circular.c
+
+OBJS = $(SRC:.c=.o)
+
+TARGET_TEST_LINKEDLIST = test_linkedlist
+TARGET_TEST_CIRCULAR = test_linkedlist_circular
+
+all: $(TARGET_TEST_LINKEDLIST) $(TARGET_TEST_CIRCULAR)
+
+$(TARGET_TEST_LINKEDLIST): linkedlist.o test_linkedlist.o
+	$(CC) $(CFLAGS) -o $@ $^
+
+$(TARGET_TEST_CIRCULAR): linkedlist_circular.o test_linkedlist_circular.o
+	$(CC) $(CFLAGS) -o $@ $^
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm -f *.o $(TARGET_TEST_LINKEDLIST) $(TARGET_TEST_CIRCULAR)
+
+run_tests: all
+	./$(TARGET_TEST_LINKEDLIST)
+	./$(TARGET_TEST_CIRCULAR)
